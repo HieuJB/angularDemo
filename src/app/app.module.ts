@@ -4,9 +4,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-// import { FormFieldComponent } from './components/form-field/form-field.component';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ServerHttpService } from '../app/config/server-http.service';
+// import { HomeComponent } from './pages/home/home.component';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -15,7 +15,9 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ServerHttpService, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ServerHttpService } from '../../config/server-http.service';
-import { catchError } from 'rxjs/operators';
-import { Observable, of, finalize } from 'rxjs';
-import { User } from '../../model/auth';
-import { Loading } from '../loading/loading';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { User, FormRegister } from '../../model/auths';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private server: ServerHttpService, private loading: Loading) {}
+  constructor(private server: ServerHttpService, private http: HttpClient) {}
   public getUsers(): Observable<User[]> {
-    this.loading.handleSetLoading(true);
-    return this.server.httpClient
-      .get<User[]>(
-        `${this.server.REST_API_SERVER}/users`,
-        this.server.httpOptions
-      )
-      .pipe(
-        catchError(this.server.handleError),
-        finalize(() => this.loading.handleSetLoading(false))
-      );
+    return this.http.get<User[]>(`${this.server.REST_API_SERVER}/users`);
+  }
+  public handleRegister(form: FormRegister): Observable<FormRegister> {
+    return this.http.post<FormRegister>(
+      `${this.server.REST_API_SERVER}/users`,
+      form
+    );
   }
 }

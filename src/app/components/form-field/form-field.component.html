@@ -1,4 +1,6 @@
-<ng-content></ng-content>
-<mat-error *ngIf="errorMessage">
-  {{errorMessage.message}}
-</mat-error>
+<div>
+  <ng-content></ng-content>
+  <mat-error *ngIf="errorMessage">
+    {{errorMessage.message}}
+  </mat-error>
+</div>

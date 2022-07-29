@@ -1,4 +1,4 @@
-import { Component, ContentChild } from '@angular/core';
+import { Component, ContentChild, Input } from '@angular/core';
 import { ERROR_MESSAGES } from '../../constants/error-messages';
 import { MyInputDirective } from '../../directives/input/input.directive';
 
@@ -10,10 +10,10 @@ import { MyInputDirective } from '../../directives/input/input.directive';
 export class FormFieldComponent {
   @ContentChild(MyInputDirective)
   myDirective!: MyInputDirective;
+  @Input() data = 50;
   constructor() {}
   get errorMessage(): { message: string } | undefined {
     if (!this.myDirective?.ngControl?.control?.pristine) {
-      console.log(this.myDirective?.ngControl?.control);
       const errors = Object.entries(
         this.myDirective?.ngControl?.control?.errors || {}
       );

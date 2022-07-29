@@ -47,6 +47,12 @@ $DemoApp-theme: mat.define-light-theme(
 .bg-warn {
   background-color: mat.get-color-from-palette($DemoApp-warn);
 }
+.snack_bar_error {
+  background-color: mat.get-color-from-palette($DemoApp-warn);
+}
+.snack_bar_success {
+  background-color: mat.get-color-from-palette($DemoApp-primary);
+}
 html,
 body {
   height: 100%;

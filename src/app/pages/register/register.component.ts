@@ -1,46 +1,66 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { finalize, of, Subscription, timer } from 'rxjs';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
-import { Loading } from '../../services/loading/loading';
+import { Loading } from '../../services/loading/loading.service';
+import { FormRegister } from '../../model/auths';
+import { handleHash } from '../../helper/bcryptis';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Toast } from '../../utils/toast';
+import { Router } from '@angular/router'; // import router from angular router
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
-  isLoading: boolean = false;
-  angForm: FormGroup;
+export class RegisterComponent implements OnDestroy {
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
-    private loading: Loading
-  ) {
-    this.createForm();
-  }
-  data: Subscription;
-  loadingSub: Subscription;
-  createForm(): void {
-    this.angForm = this.fb.group({
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required],
-    });
-  }
-  ngOnInit(): void {
-    this.loadingSub = this.loading.selectedLoading$.subscribe((value) => {
-      this.isLoading = value;
-    });
-  }
+    public loading: Loading,
+    private _snackBar: MatSnackBar,
+    private toast: Toast,
+    private route: Router
+  ) {}
+  public form: FormRegister = {
+    name: '',
+    email: '',
+    password: '',
+  };
+  public isSuccess: boolean = true;
+  private users: Subscription;
+  private registration: Subscription;
   onSubmit() {
-    this.loadingSub = this.loading.selectedLoading$.subscribe((value) => {
-      this.isLoading = value;
-    });
-    this.data = this.authService.getUsers().subscribe((value) => {
-      console.log(value);
+    let data = { ...this.form };
+    data.password = handleHash(data.password);
+    this.users = this.authService.getUsers().subscribe((value) => {
+      const isExistEmail = value.find((item) => item.email == data.email);
+      if (isExistEmail) {
+        this.isSuccess = false;
+        this.toast.handleOpenToast(
+          this._snackBar,
+          'Email is exists.',
+          '',
+          2000,
+          'snack_bar_error'
+        );
+      } else {
+        this.registration = this.authService
+          .handleRegister(data)
+          .subscribe(() => {
+            this.toast.handleOpenToast(
+              this._snackBar,
+              'Register successfully.',
+              '',
+              2000,
+              'snack_bar_success'
+            );
+          });
+        this.route.navigate(['/']);
+      }
     });
   }
-  //computed
-  ngOnDestroy() {
-    this.loadingSub.unsubscribe();
+  ngOnDestroy(): void {
+    this.users && this.users.unsubscribe();
+    this.registration && this.registration.unsubscribe();
   }
 }

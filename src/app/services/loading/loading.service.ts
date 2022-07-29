@@ -6,8 +6,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class Loading {
   private isLoading$ = new BehaviorSubject<boolean>(false);
-  selectedLoading$ = this.isLoading$.asObservable();
-  handleSetLoading(params: boolean) {
-    this.isLoading$.next(params);
+  public readonly selectedLoading$ = this.isLoading$.asObservable();
+  public show() {
+    this.isLoading$.next(true);
+  }
+  public hide() {
+    this.isLoading$.next(false);
   }
 }

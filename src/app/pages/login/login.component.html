@@ -5,40 +5,34 @@
     Blog App
     <br>Login
   </h1>
-  <form novalidate class="d-flex flex-column">
-    <!-- <mat-form-field class="example-full-width"> -->
-    <!-- <my-form-field> -->
-    <mat-label>Email</mat-label>
-    <input type="email" [(ngModel)]="email" required placeholder="Ex. pat@example.com" name="email" myInput type="text"
-      required minlength="4">
-    <!-- <mat-error *ngIf="angForm.controls['email'].errors?.['required']">
-        Email is required
-      </mat-error>
-      <mat-error *ngIf="angForm.controls['email'].errors?.['email']">
-        Please enter a valid email address
-      </mat-error> -->
-    <!-- </my-form-field> -->
-    <!-- </mat-form-field> -->
-    <mat-form-field class="example-full-width my-2">
-      <mat-label>Password</mat-label>
-      <input type="password" matInput name="password" placeholder="***********">
-      <!-- <mat-error *ngIf="angForm.controls['password'].errors?.['required']">
-        Password is required
-      </mat-error> -->
-    </mat-form-field>
-    <!-- <div class="form__button">
+  <form class="d-flex flex-column" #loginForm="ngForm">
+    <my-form-field>
+      <mat-form-field class="mt-1">
+        <mat-label>Email</mat-label>
+        <input type="text" [(ngModel)]="form.email" matInput myInput name="email" placeholder="Ex. pat@example.com"
+          required>
+      </mat-form-field>
+    </my-form-field>
+    <my-form-field [data]="60">
+      <mat-form-field class="mt-1">
+        <mat-label>Password</mat-label>
+        <input [(ngModel)]="form.password" type="password" matInput myInput name="password" required
+          placeholder="***********">
+      </mat-form-field>
+    </my-form-field>
+    <div class="form__button">
       <button appDebounceClick (debounceClick)="onSubmit()" [debounceTime]="500" type="submit"
-        [disabled]="angForm.status === 'INVALID'" mat-raised-button color="primary">
+        [disabled]="loginForm.form.invalid" mat-raised-button color="primary">
         <div class="d-flex justify-center align-center">
           Login
-          <app-loading *ngIf="isLoading" [size]="20" class="ml-1"></app-loading>
+          <app-loading *ngIf="loading.selectedLoading$ | async" [size]="20" class="ml-1"></app-loading>
         </div>
       </button>
     </div>
     <div class="form__footer d-flex my-2 fs-3">
       <p class="mr-1" class="warn">Create Accout?&nbsp;</p>
       <a routerLink="/register" class="primary fw-500">Sign Up</a>
-    </div> -->
+    </div>
   </form>
   <br />
 </div>
