@@ -24,7 +24,7 @@ export class ServerHttpService implements HttpInterceptor {
   //     // Authorization: 'Basic ' + btoa('username:password'),
   //   }),
   // };
-  public REST_API_SERVER = 'http://localhost:3000';
+  public REST_API_SERVER = 'https://angular-madison.herokuapp.com';
   private totalRequests = 0;
   constructor(private loading: Loading) {}
   intercept(
